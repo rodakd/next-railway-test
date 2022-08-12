@@ -1,9 +1,12 @@
+ARG DATABASE_URL
+
 FROM node:16-alpine AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY . .
 RUN npm ci
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV DATABASE_URL=$DATABASE_URL
 RUN npx prisma migrate deploy
 RUN npx prisma generate
 RUN npm run build
